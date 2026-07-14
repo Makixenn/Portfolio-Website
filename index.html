@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Interactive Art Portfolio</title>
+
+    <!-- Link to your existing CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Modern Bold Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <!-- Load Matter.js for the dangling cord physics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
-<body>
-    <header>
-    <div class="header__wrapper">
-        <div class="header__container">
-            <div class="header-title-logo">
-                <img src="./imgs/logo.gif" alt="">
-            </div>
-            <div class="header-nav-list-container">
-                <div class="header-nav-list">
-                    <ul>
-                        <li><a href="">HOME</a></li>
-                        <li><a href="">PROJECTS</a></li>
-                        <li><a href="">WORK</a></li>
-                        <li><a href="">ABOUT</a></li>
-                    </ul>
+
+<body class="dark-mode">
+
+    <!-- The Dark Room: This canvas will hold the dangling cord -->
+    <div id="physics-container"></div>
+    <!-- Background Title -->
+    <h1 id="landing-title">
+        <span>P</span><span>O</span><span class="cracked" data-char="R">R</span><span>T</span><span class="cracked crooked" data-char="F">F</span><span>O</span><span>L</span><span>I</span><span class="cracked crooked-alt" data-char="O">O</span>
+    </h1>
+    <!-- The Portfolio -->
+    <main id="portfolio-content">
+        <section id="tabletop">
+            <div id="focus-overlay"></div>
+            
+            <!-- Minimalist CSS Laptop (Top Right) -->
+            <div id="laptop">
+                <div class="laptop-screen"></div>
+                <div class="laptop-base">
+                    <div class="laptop-keyboard"></div>
+                    <div class="laptop-trackpad"></div>
                 </div>
             </div>
-            <div class="header-socials-container">
-                <div class="header-socials">
-                    <ul>
-                        <li><a href=""><i class="fa-brands fa-twitter"></i></a></li>
-                        <li><a href=""><i class="fa-brands fa-pixiv"></i></a></li>
-                        <li><a href=""><i class="fa-brands fa-youtube"></i></a></li>
-                    </ul>
-                </div>
+
+            <!-- Draggable Photos -->
+            <div class="photo" style="top: 10%; left: 15%;" data-rotation="-8">
+                <div class="photo-inner">Art 1</div>
             </div>
-        </div>
-    </div>
-    </header>
+            <div class="photo landscape" style="top: 15%; left: 55%;" data-rotation="12">
+                <div class="photo-inner">Art 2</div>
+            </div>
+            <div class="photo" style="top: 45%; left: 30%;" data-rotation="-4">
+                <div class="photo-inner">Art 3</div>
+            </div>
+            <div class="photo landscape" style="top: 55%; left: 70%;" data-rotation="7">
+                <div class="photo-inner">Art 4</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Link to the JavaScript file -->
+    <script src="js/script.js"></script>
 </body>
-<script src="https://kit.fontawesome.com/a1de6f9e13.js" crossorigin="anonymous"></script>
+
 </html>

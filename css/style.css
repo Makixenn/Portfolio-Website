@@ -1,0 +1,363 @@
+/* Reset default browser margins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbars for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  /* Smooth transition for the 'lights on' effect */
+  transition: background-color 0.8s ease, color 0.8s ease;
+  overflow-y: auto; /* Allow vertical scrolling at all times */
+  overflow-x: hidden; /* ALWAYS lock horizontal scrolling */
+  font-family: sans-serif;
+}
+
+/* --- THEMES --- */
+
+/* The Initial Pitch-Black Room */
+body.dark-mode {
+  background-color: #000000;
+  color: #000000;
+  /* Hides text entirely */
+}
+
+/* The Revealed Portfolio */
+body.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* --- LAYOUT CONTROLS --- */
+
+/* Keeps the physics canvas on top of everything so you can grab the cord */
+#physics-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+/* --- DARK MODE STYLES FOR THE DESK --- */
+body.dark-mode #tabletop { 
+  background-color: #050505; 
+  /* Huge soft shadow that bleeds upwards to create a smooth vertical gradient blend! */
+  box-shadow: 0 -100px 100px #050505; 
+}
+body.dark-mode #tabletop::before { background-color: #0a0a0a; border-color: #222; }
+body.dark-mode #tabletop::after { border-color: #111; }
+body.dark-mode .laptop-base { background: #111; border-color: #222; }
+body.dark-mode .laptop-keyboard { background-color: #0a0a0a; border-color: #222; }
+body.dark-mode .laptop-trackpad { border-color: #222; }
+body.dark-mode .photo { background: #1a1a1a; box-shadow: 0 5px 10px rgba(0,0,0,0.8); }
+body.dark-mode .photo-inner { background: #111; color: #555; }
+
+/* The Glowing Screen! */
+body.dark-mode .laptop-screen {
+  background: #ffffff;
+  border-color: #fff;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(255, 255, 255, 0.2);
+}
+
+/* Transitions for smooth light toggling */
+#tabletop, #tabletop::before, #tabletop::after, .laptop-base, .laptop-keyboard, .laptop-trackpad, .photo-inner, .laptop-screen {
+  transition: background-color 1.5s ease, border-color 1.5s ease, box-shadow 1.5s ease;
+}
+
+#portfolio-content {
+  position: relative;
+  z-index: 1;
+  margin-top: 100vh;
+  /* Pushes content below the 100vh landing section */
+}
+
+/* --- TABLETOP GALLERY --- */
+#tabletop {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #ffffff; /* White floor color */
+  overflow: hidden; /* Keep photos inside the table boundaries */
+  z-index: 1;
+}
+
+/* 3D Angled Table Box (Surface) */
+#tabletop::before {
+  content: "";
+  position: absolute;
+  top: 15vh;
+  left: 10vw;
+  width: 80vw;
+  height: 70vh;
+  background-color: #fafafa;
+  border: 4px solid #111;
+  border-radius: 8px;
+  /* Hard sketch-style shadow */
+  box-shadow: 20px 30px 0px rgba(0,0,0,0.1); 
+  /* Slight top-down angled effect */
+  transform: perspective(1000px) rotateX(15deg);
+  z-index: 2; /* Surface is above legs */
+  pointer-events: none;
+}
+
+/* Table Legs */
+#tabletop::after {
+  content: "";
+  position: absolute;
+  top: 50vh; /* Start under the table surface */
+  left: 13vw; /* Inset slightly from the table edges */
+  width: 74vw;
+  height: 60vh; /* Reach down past the bottom of the screen */
+  border-left: 16px solid #111;
+  border-right: 16px solid #111;
+  border-radius: 4px;
+  filter: drop-shadow(20px 30px 0px rgba(0,0,0,0.1)); /* Match the sketch drop-shadow */
+  z-index: 1; /* Behind the table surface */
+  pointer-events: none;
+}
+
+/* Minimalist CSS Laptop */
+#laptop {
+  position: absolute;
+  top: 20vh; /* Top right of the table */
+  right: 18vw;
+  width: 14vw;
+  height: 9vw;
+  z-index: 10;
+  /* Apply same perspective so it sits flat on the table */
+  transform: perspective(1000px) rotateX(15deg);
+  transform-style: preserve-3d;
+}
+
+.laptop-base {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #fafafa;
+  border-radius: 4px;
+  box-shadow: 10px 15px 0 rgba(0,0,0,0.1); /* Shadow matching sketch */
+  border: 3px solid #111;
+}
+
+.laptop-keyboard {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 80%;
+  height: 50%;
+  background-color: #e5e5e5;
+  border: 2px solid #111;
+  border-radius: 2px;
+  /* Sketchy keys using a grid pattern */
+  background-image: 
+    linear-gradient(to right, #111 2px, transparent 2px),
+    linear-gradient(to bottom, #111 2px, transparent 2px);
+  background-size: 8% 25%; /* Creates rows and columns of keys */
+}
+
+.laptop-trackpad {
+  position: absolute;
+  bottom: 8%;
+  left: 35%;
+  width: 30%;
+  height: 18%;
+  border: 2px solid #111;
+  border-radius: 2px;
+}
+
+.laptop-screen {
+  position: absolute;
+  bottom: 100%;
+  width: 100%;
+  height: 80%;
+  background: #111; /* Dark screen */
+  border: 3px solid #111;
+  border-radius: 4px 4px 0 0;
+  transform-origin: bottom center;
+  /* Open the lid! Reduced angle so it's not edge-on to the camera */
+  transform: rotateX(-60deg); 
+}
+
+/* Focus Overlay */
+#focus-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#focus-overlay.active {
+  opacity: 1;
+  pointer-events: auto; /* Click overlay to close */
+}
+
+.photo {
+  position: absolute;
+  width: 120px; /* Shrunk down for realistic size! */
+  height: 150px;
+  background: #ffffff;
+  padding: 8px 8px 35px 8px; /* Proportional bottom border */
+  box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+  cursor: grab;
+  user-select: none; /* Prevent highlighting text when dragging */
+  /* Combine drag transitions with the dark mode color transition */
+  transition: box-shadow 0.2s ease, transform 0.2s ease, background-color 1.5s ease;
+  z-index: 10; /* Keep photos above the table surface by default */
+}
+
+/* Landscape Photo Variant */
+.photo.landscape {
+  width: 180px;
+  height: 120px;
+  padding: 8px; /* Even border on all sides */
+}
+
+.photo:active:not(.focused) {
+  cursor: grabbing;
+}
+
+.photo.dragging {
+  box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+  z-index: 100 !important; /* Pop to front while dragging */
+  /* Remove the 3D table tilt, so the photo faces the user perfectly! */
+  transform: perspective(1000px) rotateX(0deg) scale(1.5) rotateZ(0deg) !important;
+  transition: none !important; /* Fixes massive drag lag */
+}
+
+.photo.focused {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  /* Centered, massive, and straight for viewing */
+  /* We use translate(-50%, -50%) to center it exactly based on its own width/height */
+  transform: translate(-50%, -50%) perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(3.5) !important;
+  z-index: 1000 !important; /* Above overlay */
+  box-shadow: 0 40px 80px rgba(0,0,0,0.9) !important;
+  cursor: default; /* Normal cursor in focus */
+  /* Transition the fixed pop! */
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important; 
+}
+
+.photo-inner {
+  width: 100%;
+  height: 100%;
+  background-color: #e5e5e5;
+  border: 1px solid #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888888;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  pointer-events: none; /* Let drag events hit the parent */
+}
+
+/* Landing Page Title */
+#landing-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13vw;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5vw;
+  margin: 0;
+  z-index: 5; /* Behind the cord */
+  pointer-events: none; /* Let clicks pass through */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+body.dark-mode #landing-title {
+  color: transparent; /* Invisible face */
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.15); /* Faint outline only */
+}
+
+body.light-mode #landing-title {
+  color: #111111; /* Stark dark fill */
+  -webkit-text-stroke: 0;
+}
+
+body.light-mode #landing-title span {
+  animation: fluorescent-flicker 3s infinite;
+}
+
+#landing-title span {
+  display: inline-block;
+  position: relative;
+}
+
+/* Crooked broken letters */
+#landing-title span.crooked {
+  transform: rotate(8deg) translateY(5px);
+}
+#landing-title span.crooked-alt {
+  transform: rotate(-12deg) translateY(10px) translateX(-5px);
+}
+
+/* Cracks via CSS slicing */
+#landing-title span.cracked::after {
+  content: attr(data-char);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: inherit;
+  -webkit-text-stroke: inherit;
+  /* Default crack slice */
+  clip-path: polygon(0 0, 100% 0, 100% 40%, 0 60%);
+  transform: translate(3px, -2px) rotate(-2deg);
+}
+
+#landing-title span:nth-child(3).cracked::after {
+  clip-path: polygon(0 0, 100% 0, 100% 30%, 0 50%);
+  transform: translate(-4px, 3px) rotate(1deg);
+}
+
+#landing-title span:nth-child(9).cracked::after {
+  clip-path: polygon(0 50%, 100% 30%, 100% 100%, 0 100%);
+  transform: translate(5px, 6px) rotate(-4deg);
+}
+
+/* Give each letter slightly different timing so they flicker out of sync */
+body.light-mode #landing-title span:nth-child(1) { animation: fluorescent-flicker 6.1s infinite 0.1s; }
+body.light-mode #landing-title span:nth-child(2) { animation: none; } /* O stays solid */
+body.light-mode #landing-title span:nth-child(3) { animation: fluorescent-flicker 7.5s infinite 0.3s; }
+body.light-mode #landing-title span:nth-child(4) { animation: none; } /* T stays solid */
+body.light-mode #landing-title span:nth-child(5) { animation: fluorescent-flicker 5.2s infinite 0.5s; }
+body.light-mode #landing-title span:nth-child(6) { animation: fluorescent-flicker 6.9s infinite 0.9s; }
+body.light-mode #landing-title span:nth-child(7) { animation: none; } /* L stays solid */
+body.light-mode #landing-title span:nth-child(8) { animation: fluorescent-flicker 5.7s infinite 1.5s; }
+body.light-mode #landing-title span:nth-child(9) { animation: fluorescent-flicker 8.3s infinite 0.6s; }
+
+/* Broken bulb flicker effect */
+@keyframes fluorescent-flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 1;
+    color: #111111;
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Strong cast shadow when fully powered */
+    filter: blur(0px);
+  }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+    opacity: 0.15;
+    color: #4a4a40; /* Sickly warm-grey color as the bulb dies */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow drops instantly */
+    filter: blur(1.5px); /* Slight electric blur/fuzz when losing power */
+  }
+}
