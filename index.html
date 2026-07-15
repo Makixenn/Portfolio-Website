@@ -8,8 +8,8 @@
 
     <!-- Link to your existing CSS file -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Modern Bold Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <!-- Modern Bold Font & Omori Pixel Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=VT323&display=swap" rel="stylesheet">
     <!-- Load Matter.js for the dangling cord physics -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
@@ -22,17 +22,111 @@
     <h1 id="landing-title">
         <span>P</span><span>O</span><span class="cracked" data-char="R">R</span><span>T</span><span class="cracked crooked" data-char="F">F</span><span>O</span><span>L</span><span>I</span><span class="cracked crooked-alt" data-char="O">O</span>
     </h1>
+    <h2 id="landing-subtitle">created by xenn</h2>
     <!-- The Portfolio -->
     <main id="portfolio-content">
         <section id="tabletop">
             <div id="focus-overlay"></div>
             
+            <!-- Mini OS Modal -->
+            <div id="os-modal" class="hidden">
+                <div id="terminal-interface" tabindex="0">
+                    <div id="terminal-output">
+                        <div>Welcome to XennOS v1.0</div>
+                        <div>Type 'help' for available commands.</div>
+                    </div>
+                    <div id="terminal-input-line">
+                        <span class="prompt">guest@xenn:~$</span>
+                        <span id="terminal-input"></span><span class="cursor">_</span>
+                    </div>
+                </div>
+                
+                <!-- Omori OS GUI -->
+                <div id="gui-interface" class="hidden white-space">
+                    <div class="desktop-area">
+                        <div class="desktop-icon" onclick="alert('You stare at the sketchbook. There is nothing to draw.')">
+                            <img src="assets/imgs/sketchbook.png" alt="Sketchbook" class="icon-img">
+                            <div class="icon-label">Sketchbook</div>
+                        </div>
+                        <div class="desktop-icon" onclick="alert('A box of tissues. For wiping your sorrows away.')">
+                            <img src="assets/imgs/toilet_paper.png" alt="Tissues" class="icon-img">
+                            <div class="icon-label">Tissues</div>
+                        </div>
+                        <div class="desktop-icon" id="omori-door">
+                            <img src="assets/imgs/door.png" alt="Door" class="icon-img">
+                            <div class="icon-label">Open Door</div>
+                        </div>
+                    </div>
+                    
+                    <div id="start-menu" class="hidden">
+                        <div class="start-menu-left">
+                            <div class="start-menu-item" onclick="alert('Internet Explorer could not display the webpage.')">Internet Explorer</div>
+                            <div class="start-menu-item" onclick="alert('BOOM! You hit a mine.')">Minesweeper</div>
+                            <div class="start-menu-item">Paint</div>
+                        </div>
+                        <div class="start-menu-right">
+                            <div class="start-menu-item">Documents</div>
+                            <div class="start-menu-item">Pictures</div>
+                            <div class="start-menu-item">Music</div>
+                            <div class="start-menu-divider"></div>
+                            <div class="start-menu-item" style="margin-top:auto;" onclick="location.reload()">Shut down</div>
+                        </div>
+                    </div>
+
+                    <div class="taskbar">
+                        <div id="start-btn" class="start-btn">START</div>
+                        <div class="taskbar-apps">
+                        </div>
+                        <div class="system-tray">
+                            <span id="win-clock">12:00 PM</span>
+                        </div>
+                        <img src="assets/gif/white_cat.gif" id="taskbar-cat" alt="Sleeping Cat">
+                    </div>
+                </div>
+            </div>
+            
             <!-- Minimalist CSS Laptop (Top Right) -->
             <div id="laptop">
-                <div class="laptop-screen"></div>
+                <div class="laptop-screen" tabindex="0">
+                    <!-- Dashboard -->
+                    <div id="ambient-dashboard">
+                        <div id="clock-widget">12:00 PM</div>
+                        <div id="now-playing-widget">Waiting for music...</div>
+                    </div>
+                </div>
                 <div class="laptop-base">
                     <div class="laptop-keyboard"></div>
                     <div class="laptop-trackpad"></div>
+                </div>
+            </div>
+
+            <!-- Vinyl Player (Top Left) -->
+            <div id="vinyl-player">
+                <div class="vinyl-base">
+                    <div class="vinyl-platter"></div>
+                    <div class="vinyl-center-pin"></div>
+                    <div class="vinyl-tonearm"></div>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+                </div>
+            </div>
+
+            <!-- Albums & Sleeves (Scattered on table) -->
+            <div class="album-sleeve" style="top: 40vh; left: 22vw; --rot: 10deg;" data-sleeve="0" data-message="BOCCHI!!!">
+                <div class="sleeve-cover" style="background-image: url('assets/imgs/kessoku_vinyl1.jpg');"></div>
+                <div class="cd" data-song="assets/sounds/Guitar, Loneliness and Blue Planet.mp3" data-sleeve="0">
+                    <div class="cd-inner" style="background-image: url('assets/imgs/kessoku_vinyl1.jpg');"></div>
+                </div>
+            </div>
+            <div class="album-sleeve" style="top: 45vh; left: 12vw; --rot: -20deg;" data-sleeve="1" data-message="PERSONA!">
+                <div class="sleeve-cover" style="background-image: url('assets/imgs/p3_vinyl2.jpg');"></div>
+                <div class="cd" data-song="assets/sounds/Persona 3 Reload - Color Your Night.mp3" data-sleeve="1">
+                    <div class="cd-inner" style="background-image: url('assets/imgs/p3_vinyl2.jpg');"></div>
+                </div>
+            </div>
+            <div class="album-sleeve" style="top: 50vh; left: 3vw; --rot: 5deg;" data-sleeve="2" data-message="I have no enemies...">
+                <div class="sleeve-cover" style="background-image: url('assets/imgs/noenemies_vinyl3.jpg');"></div>
+                <div class="cd" data-song="assets/sounds/aruarian dance.mp3" data-sleeve="2">
+                    <div class="cd-inner" style="background-image: url('assets/imgs/noenemies_vinyl3.jpg');"></div>
                 </div>
             </div>
 
@@ -49,6 +143,9 @@
             <div class="photo landscape" style="top: 55%; left: 70%;" data-rotation="7">
                 <div class="photo-inner">Art 4</div>
             </div>
+            
+            <!-- Comic Text Bubble -->
+            <div id="comic-bubble"></div>
         </section>
     </main>
 

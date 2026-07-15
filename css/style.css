@@ -63,9 +63,10 @@ body.dark-mode .photo-inner { background: #111; color: #555; }
 
 /* The Glowing Screen! */
 body.dark-mode .laptop-screen {
-  background: #ffffff;
-  border-color: #fff;
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(255, 255, 255, 0.2);
+  background: #051005; /* Dark screen for terminal */
+  border-color: #222;
+  /* Soft green glow from the terminal text */
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.15), 0 0 60px rgba(0, 255, 0, 0.1);
 }
 
 /* Transitions for smooth light toggling */
@@ -186,6 +187,133 @@ body.dark-mode .laptop-screen {
   transform-origin: bottom center;
   /* Open the lid! Reduced angle so it's not edge-on to the camera */
   transform: rotateX(-60deg); 
+  transition: background-color 1.5s ease, border-color 1.5s ease;
+  overflow: hidden;
+  outline: none;
+}
+
+/* --- LAPTOP DASHBOARD & TERMINAL --- */
+#ambient-dashboard {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  text-align: right;
+  font-family: 'Courier New', Courier, monospace;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(255,255,255,0.5);
+  font-size: 0.45rem;
+  z-index: 2;
+  opacity: 1; /* Always visible initially */
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+/* --- MINI OS MODAL (PIXEL OS STYLE) --- */
+#os-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 75vh;
+  background-color: #000;
+  border: 4px solid #000;
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  font-family: 'VT323', monospace;
+}
+
+#os-modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -45%) scale(0.95);
+}
+
+#os-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 15px;
+  background: #fff;
+  border-bottom: 4px solid #000;
+  color: #000;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+#os-close-btn {
+  background: #000;
+  color: #fff;
+  border: 2px solid #000;
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
+  padding: 0 8px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #aaa;
+}
+#os-close-btn:hover { background: #fff; color: #000; box-shadow: 3px 3px 0 #000; }
+  border: none;
+  color: #ff5555;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+#os-close-btn:hover { color: #ff0000; }
+
+#terminal-interface {
+  flex-grow: 1;
+  padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  color: #0f0;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  line-height: 1.4;
+  outline: none;
+  overflow: hidden;
+}
+
+/* Remove old laptop screen focus requirements for terminal */
+#terminal-output {
+  margin-bottom: 10px;
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #0f0 #050505;
+}
+#terminal-output::-webkit-scrollbar { width: 8px; }
+#terminal-output::-webkit-scrollbar-thumb { background: #0f0; }
+
+#terminal-input-line {
+  display: flex;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.prompt {
+  color: #0f0;
+  margin-right: 3px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.8rem;
+  height: 1.2rem;
+  background-color: #0f0;
+  animation: blink 1s step-end infinite;
+  box-shadow: 0 0 5px #0f0;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* Focus Overlay */
@@ -299,6 +427,32 @@ body.light-mode #landing-title span {
   animation: fluorescent-flicker 3s infinite;
 }
 
+#landing-subtitle {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2vw;
+  font-weight: 300; /* Not bold */
+  letter-spacing: 0.8vw;
+  margin: 0;
+  z-index: 5;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 1.5s ease;
+}
+
+body.dark-mode #landing-subtitle {
+  opacity: 0;
+}
+
+body.light-mode #landing-subtitle {
+  opacity: 1;
+  color: #111111;
+  /* Removed flicker animation and drop shadow */
+}
+
 #landing-title span {
   display: inline-block;
   position: relative;
@@ -361,3 +515,549 @@ body.light-mode #landing-title span:nth-child(9) { animation: fluorescent-flicke
     filter: blur(1.5px); /* Slight electric blur/fuzz when losing power */
   }
 }
+
+/* --- VINYL PLAYER --- */
+#vinyl-player {
+  position: absolute;
+  top: 15vh;
+  left: 15vw;
+  width: 16vw;
+  height: 16vw;
+  z-index: 10;
+  transform: perspective(1000px) rotateX(15deg) rotateZ(5deg);
+  transform-style: preserve-3d;
+}
+
+.vinyl-base {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #c79069, #b27a55); /* Premium wood finish */
+  border: 4px solid #332211;
+  border-radius: 12px;
+  box-shadow: 15px 20px 0 rgba(0,0,0,0.15), inset 0 0 20px rgba(0,0,0,0.2);
+}
+
+body.dark-mode .vinyl-base {
+  background: linear-gradient(135deg, #2a2a2a, #111); /* Sleek dark metal */
+  border-color: #0a0a0a;
+}
+
+/* Control Knobs */
+.vinyl-base::before {
+  content: "";
+  position: absolute;
+  bottom: 8%;
+  right: 18%;
+  width: 4%;
+  height: 4%;
+  background: radial-gradient(circle at top left, #ddd, #444);
+  border-radius: 50%;
+  border: 1px solid #111;
+  box-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+}
+
+.vinyl-base::after {
+  content: "";
+  position: absolute;
+  bottom: 8%;
+  right: 8%;
+  width: 6%;
+  height: 6%;
+  background: radial-gradient(circle at top left, #eee, #666);
+  border-radius: 50%;
+  border: 1px solid #111;
+  box-shadow: 2px 4px 6px rgba(0,0,0,0.6);
+}
+
+.vinyl-platter {
+  position: absolute;
+  top: 12.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  border: 1px solid #000;
+  background: 
+    /* Dark slipmat */
+    radial-gradient(circle, #1a1a1a 0%, #111 65%, transparent 66%),
+    /* Shiny metallic rim */
+    conic-gradient(#888, #eee, #888, #555, #888);
+  box-shadow: 5px 8px 15px rgba(0,0,0,0.6), inset 0 0 5px rgba(255,255,255,0.2);
+}
+
+.vinyl-center-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3%;
+  height: 3%;
+  background: radial-gradient(circle at top left, #fff, #999, #333);
+  border-radius: 50%;
+  box-shadow: 2px 4px 5px rgba(0,0,0,0.6);
+  z-index: 20;
+}
+
+.vinyl-tonearm {
+  position: absolute;
+  top: 10%;
+  right: 8%;
+  width: 2.5%;
+  height: 48%;
+  background: linear-gradient(to right, #ccc, #fff, #999);
+  border-radius: 10px;
+  transform-origin: 50% 15%; /* Pivot around the counterweight base */
+  transform: rotate(15deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 21;
+  box-shadow: 4px 6px 8px rgba(0,0,0,0.4);
+}
+
+/* Base pivot & counterweight */
+.vinyl-tonearm::before {
+  content: "";
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350%;
+  height: 20%;
+  background: radial-gradient(circle at top left, #eee, #555);
+  border-radius: 50%;
+  border: 1px solid #111;
+  box-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+}
+
+/* Headshell (stylus) */
+.vinyl-tonearm::after {
+  content: "";
+  position: absolute;
+  bottom: -2%;
+  left: 50%;
+  transform: translateX(-50%) rotate(25deg);
+  width: 250%;
+  height: 15%;
+  background: #111;
+  border-radius: 3px;
+  border: 1px solid #000;
+  box-shadow: 3px 5px 6px rgba(0,0,0,0.5);
+}
+
+.vinyl-tonearm.playing {
+  transform: rotate(40deg);
+}
+
+/* Volume Slider */
+#volume-slider {
+  position: absolute;
+  bottom: 8%;
+  left: 8%;
+  width: 35%;
+  height: 0.6vw;
+  appearance: none;
+  background: #111;
+  border-radius: 4px;
+  border: 1px solid #000;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.1);
+  outline: none;
+  z-index: 20;
+}
+
+#volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.2vw;
+  height: 1.8vw;
+  background: linear-gradient(to right, #777, #ccc, #777);
+  border: 1px solid #111;
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow: 2px 3px 5px rgba(0,0,0,0.6);
+}
+
+/* --- SCATTERED ALBUM SLEEVES --- */
+.album-sleeve {
+  position: absolute;
+  width: 11.5vw;
+  height: 11.5vw;
+  /* Lay flat on the table */
+  transform: perspective(1000px) rotateX(15deg) rotateZ(var(--rot, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, z-index 0.3s;
+  z-index: 5;
+}
+
+.album-sleeve:hover {
+  /* Pull up slightly when hovering to preview */
+  transform: perspective(1000px) rotateX(15deg) rotateZ(var(--rot, 0deg)) translateZ(10px) scale(1.05);
+  z-index: 10;
+}
+
+.sleeve-cover {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #222;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #222;
+  border-radius: 2px;
+  box-shadow: 2px -2px 10px rgba(0,0,0,0.5);
+  transform: translateZ(2px); /* Sit in front of the nested CD */
+  pointer-events: none; /* Let clicks pass to the CD behind it! */
+}
+
+/* --- VINYL RECORDS --- */
+.cd {
+  position: absolute;
+  width: 11vw;
+  height: 11vw;
+  top: 0.25vw;
+  left: 0.25vw; /* Tucked completely inside the 11.5vw sleeve */
+  /* Realistic Vinyl Texture: Shiny bowtie reflection + micro grooves */
+  background: 
+    conic-gradient(
+      rgba(255,255,255,0.1) 0deg,
+      rgba(255,255,255,0.0) 25deg,
+      rgba(255,255,255,0.0) 155deg,
+      rgba(255,255,255,0.1) 180deg,
+      rgba(255,255,255,0.0) 205deg,
+      rgba(255,255,255,0.0) 335deg,
+      rgba(255,255,255,0.1) 360deg
+    ),
+    repeating-radial-gradient(
+      #151515 0,
+      #151515 2px,
+      #0d0d0d 3px,
+      #0d0d0d 4px
+    );
+  border-radius: 50%;
+  border: 1px solid #000;
+  box-shadow: 2px 5px 10px rgba(0,0,0,0.6), inset 0 0 4px rgba(255,255,255,0.1);
+  cursor: grab;
+  z-index: 1; /* Behind sleeve cover */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s ease;
+}
+
+body.dark-mode .cd {
+  /* Dimmer reflections in the dark room */
+  background: 
+    conic-gradient(
+      rgba(255,255,255,0.03) 0deg,
+      rgba(255,255,255,0.0) 25deg,
+      rgba(255,255,255,0.0) 155deg,
+      rgba(255,255,255,0.03) 180deg,
+      rgba(255,255,255,0.0) 205deg,
+      rgba(255,255,255,0.0) 335deg,
+      rgba(255,255,255,0.03) 360deg
+    ),
+    repeating-radial-gradient(
+      #111 0,
+      #111 2px,
+      #050505 3px,
+      #050505 4px
+    );
+  border-color: #000;
+  box-shadow: 2px 5px 15px rgba(0,0,0,0.8), inset 0 0 2px rgba(255,255,255,0.05);
+}
+
+.cd-inner {
+  width: 45%; /* Slightly larger picture */
+  height: 45%;
+  background-color: #f4f4f4;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  border: 1px solid #000;
+  box-shadow: 0 0 8px rgba(0,0,0,0.8); /* Look slightly inset */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-inner::after {
+  content: "";
+  width: 12%;
+  height: 12%;
+  background: #111; /* Center hole */
+  border-radius: 50%;
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.8);
+}
+
+.cd:active {
+  cursor: grabbing;
+}
+
+/* --- COMIC BUBBLE --- */
+#comic-bubble {
+  position: absolute;
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.8);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px)) scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+
+#comic-bubble.show {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 20px)) scale(1);
+}
+
+/* Bubble Tail */
+#comic-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 15px 10px 0;
+  border-style: solid;
+  border-color: #000 transparent transparent transparent;
+}
+
+#comic-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 11px 7px 0;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.cd.dragging {
+  box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+  z-index: 100 !important;
+  transform: scale(1.2) rotate(0deg) !important;
+  transition: none !important;
+}
+
+.cd.playing {
+  animation: spin-cd 2s linear infinite;
+  z-index: 15 !important;
+}
+
+@keyframes spin-cd {
+  from { transform: perspective(1000px) rotateX(15deg) rotateZ(0deg); }
+  to { transform: perspective(1000px) rotateX(15deg) rotateZ(360deg); }
+}
+
+/* --- OMORI OS GUI --- */
+#gui-interface {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  overflow: hidden;
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
+  transition: background 0.5s ease;
+}
+#gui-interface.hidden {
+  display: none;
+}
+
+/* THEMES */
+#gui-interface.white-space {
+  background: #ffffff;
+  color: #000000;
+}
+#gui-interface.headspace {
+  background: linear-gradient(135deg, #ffc0cb, #d8bfd8, #a2b5cd);
+  color: #ffffff;
+}
+
+/* DESKTOP */
+.desktop-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  padding: 20px;
+  gap: 25px;
+}
+.desktop-icon {
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  border: 2px dashed transparent;
+}
+.desktop-icon:hover {
+  border-color: #000;
+}
+.headspace .desktop-icon:hover {
+  border-color: #fff;
+}
+.icon-img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 5px;
+  image-rendering: pixelated; /* Keeps pixel art sharp */
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));
+}
+.icon-label {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.headspace .icon-label { text-shadow: 1px 1px 0 #000; }
+
+/* TASKBAR */
+.taskbar {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-top: 4px solid #000;
+}
+.white-space .taskbar {
+  background: #fff;
+  border-top-color: #000;
+  box-shadow: inset 0 4px 0 rgba(0,0,0,0.1);
+}
+.headspace .taskbar {
+  background: #a988d4; /* solid pastel purple instead of blur */
+  border-top-color: #4b2382;
+  box-shadow: inset 0 4px 0 rgba(255,255,255,0.4);
+}
+
+#taskbar-cat {
+  position: absolute;
+  right: 120px; /* sit near the clock */
+  bottom: 50px; /* sit exactly on top of the taskbar */
+  height: 64px; /* adjust size as needed */
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.start-btn {
+  padding: 5px 20px;
+  font-family: 'VT323', monospace;
+  font-size: 1.8rem;
+  border: 4px solid #000;
+  cursor: pointer;
+  margin-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.white-space .start-btn { background: #000; color: #fff; box-shadow: 4px 4px 0 #aaa; }
+.headspace .start-btn { background: #d8bfd8; color: #4b2382; border-color: #4b2382; box-shadow: 4px 4px 0 #4b2382; }
+.start-btn:hover {
+  background: #fff; color: #000; box-shadow: 4px 4px 0 #000;
+}
+.headspace .start-btn:hover {
+  background: #fff; color: #4b2382; box-shadow: 4px 4px 0 #4b2382;
+}
+
+.taskbar-apps {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+.taskbar-app {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  border: 3px solid transparent;
+  cursor: pointer;
+}
+.taskbar-app.active {
+  border-color: #000;
+  background: #eee;
+  box-shadow: inset 4px 4px 0 rgba(0,0,0,0.2);
+}
+.headspace .taskbar-app.active { 
+  border-color: #4b2382; 
+  background: rgba(255,255,255,0.4); 
+  box-shadow: inset 4px 4px 0 rgba(0,0,0,0.1);
+}
+
+.system-tray {
+  font-size: 1.5rem;
+  padding: 0 10px;
+}
+.headspace .system-tray { color: #fff; text-shadow: 2px 2px 0 #4b2382; }
+
+/* START MENU */
+#start-menu {
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  width: 320px;
+  height: 380px;
+  border: 4px solid #000;
+  display: flex;
+  z-index: 100;
+}
+#start-menu.hidden {
+  display: none;
+}
+.white-space #start-menu {
+  background: #fff;
+  box-shadow: 8px 8px 0 #000;
+}
+.headspace #start-menu {
+  background: #d8bfd8;
+  border-color: #4b2382;
+  box-shadow: 8px 8px 0 #4b2382;
+}
+
+.start-menu-left {
+  flex: 1;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 4px dashed #000;
+}
+.headspace .start-menu-left { border-color: #4b2382; }
+
+.start-menu-right {
+  width: 120px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.start-menu-item {
+  padding: 5px;
+  cursor: pointer;
+}
+.start-menu-item:hover {
+  background: #000;
+  color: #fff;
+}
+.headspace .start-menu-item { color: #4b2382; font-weight: bold; }
+.headspace .start-menu-item:hover {
+  background: #4b2382;
+  color: #fff;
+}
+.start-menu-divider {
+  height: 0;
+  border-top: 4px dashed #000;
+  margin: 5px 0;
+}
+.headspace .start-menu-divider { border-color: #4b2382; }
